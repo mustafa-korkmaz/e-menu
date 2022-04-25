@@ -1,0 +1,37 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  tag: '$(Build.BuildId)'
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests'
+  inputs:
+    command: 'test'
+    projects: 'tests/**/*Tests.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+    publishTestResults: false
+- task: Docker@0
+  displayName: 'Build image'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: 'mayteks cloud run connection'
+    imageName: 'mayteks/workflow-manager-api:$(tag)'
+- task: Docker@2
+  displayName: 'Push image to Google Cloud'
+  inputs:
+    containerRegistry: 'mayteks cloud run connection'
+    repository: 'mayteks/workflow-manager-api'
+    command: 'push'

@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "src\Presentation\Presentation.csproj", "{1CB59A89-E162-47AF-ACEB-5E7191B53D8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain.csproj", "{862B2EEC-8600-40B4-887C-517D461D190F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{9C3C27C5-A7D3-4373-A585-EBBDDB3B0069}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\Application\Application.csproj", "{BAECC139-15A0-4470-9110-58414B8D122B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3648862E-54A4-4B43-BBAB-87F7B80037D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{802FA50E-8B96-49E2-9414-BAA6D456E4B1}"
+	ProjectSection(SolutionItems) = preProject
+		build\azure-pipelines-production.yml = build\azure-pipelines-production.yml
+		build\azure-pipelines.yml = build\azure-pipelines.yml
+		build\pre-merge-validation.yml = build\pre-merge-validation.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CB59A89-E162-47AF-ACEB-5E7191B53D8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CB59A89-E162-47AF-ACEB-5E7191B53D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CB59A89-E162-47AF-ACEB-5E7191B53D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CB59A89-E162-47AF-ACEB-5E7191B53D8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862B2EEC-8600-40B4-887C-517D461D190F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862B2EEC-8600-40B4-887C-517D461D190F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862B2EEC-8600-40B4-887C-517D461D190F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862B2EEC-8600-40B4-887C-517D461D190F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C3C27C5-A7D3-4373-A585-EBBDDB3B0069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C3C27C5-A7D3-4373-A585-EBBDDB3B0069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C3C27C5-A7D3-4373-A585-EBBDDB3B0069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C3C27C5-A7D3-4373-A585-EBBDDB3B0069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAECC139-15A0-4470-9110-58414B8D122B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAECC139-15A0-4470-9110-58414B8D122B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAECC139-15A0-4470-9110-58414B8D122B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAECC139-15A0-4470-9110-58414B8D122B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1CB59A89-E162-47AF-ACEB-5E7191B53D8A} = {3648862E-54A4-4B43-BBAB-87F7B80037D8}
+		{862B2EEC-8600-40B4-887C-517D461D190F} = {3648862E-54A4-4B43-BBAB-87F7B80037D8}
+		{9C3C27C5-A7D3-4373-A585-EBBDDB3B0069} = {3648862E-54A4-4B43-BBAB-87F7B80037D8}
+		{BAECC139-15A0-4470-9110-58414B8D122B} = {3648862E-54A4-4B43-BBAB-87F7B80037D8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {16926691-02CE-4435-8B12-A6D70AFB7AB3}
+	EndGlobalSection
+EndGlobal
