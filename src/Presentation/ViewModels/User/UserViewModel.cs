@@ -9,7 +9,7 @@ namespace Presentation.ViewModels.User
 
         public bool IsEmailConfirmed { get; set; }
 
-        public byte Subscription { get; set; }
+        public string? Subscription { get; set; }
 
         public DateTime SubscriptionExpiresAt { get; set; }
     }

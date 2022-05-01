@@ -1,6 +1,7 @@
 ﻿using Domain.Aggregates.Product;
 using Domain.Aggregates.User;
 using Infrastructure.Persistence.MongoDb;
+using MongoDB.Driver;
 
 namespace Infrastructure.Repositories
 {
@@ -11,14 +12,16 @@ namespace Infrastructure.Repositories
 
         }
 
-        public Task<User?> GetByUsernameAsync(string username)
+        public Task<User> GetByUsernameAsync(string username)
         {
-            throw new NotImplementedException();
+            var filter = Builders<User>.Filter.Eq(doc => doc.Username, username);
+            return Collection.Find(filter).SingleOrDefaultAsync();
         }
 
-        public Task<User?> GetByEmailAsync(string email)
+        public Task<User> GetByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var filter = Builders<User>.Filter.Eq(doc => doc.Email, email);
+            return Collection.Find(filter).SingleOrDefaultAsync();
         }
     }
 }

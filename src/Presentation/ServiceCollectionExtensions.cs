@@ -1,7 +1,12 @@
-﻿using Application.Services.Menu;
+﻿using Application.Constants;
+using Application.Services.Account;
+using Application.Services.Menu;
 using Application.Services.Product;
 using Application.Services.Tenant;
 using Infrastructure.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Presentation
 {
@@ -32,8 +37,40 @@ namespace Presentation
             services.AddScoped<ITenantContextService, TenantContextService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IMenuService, MenuService>();
+            services.AddTransient<IAccountService, AccountService>();
 
             return services;
+        }
+
+        public static void ConfigureJwtAuthorization(this IServiceCollection services)
+        {
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy(AppConstants.DefaultAuthorizationPolicy, new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+        }
+
+        public static void ConfigureJwtAuthentication(this IServiceCollection services)
+        {
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKey = JwtTokenConstants.IssuerSigningKey,
+                        ValidAudience = JwtTokenConstants.Audience,
+                        ValidIssuer = JwtTokenConstants.Issuer,
+                        ValidateIssuerSigningKey = true,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(0)
+                    };
+                });
         }
     }
 }

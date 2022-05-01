@@ -1,4 +1,6 @@
 ﻿
+using Application.Enums;
+
 namespace Application.Dto.User
 {
     public class UserDto : DtoBase
@@ -11,7 +13,7 @@ namespace Application.Dto.User
 
         public string PasswordHash { get; set; } = string.Empty;
 
-        public byte Subscription { get; set; }
+        public Subscription Subscription { get; set; }
 
         public DateTime SubscriptionExpiresAt { get; set; }
     }

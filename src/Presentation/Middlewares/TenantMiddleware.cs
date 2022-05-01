@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Application.Enums;
 using Application.Services.Tenant;
+using Infrastructure.Services;
 
 namespace Presentation.Middlewares
 {
@@ -53,9 +54,7 @@ namespace Presentation.Middlewares
         {
             var claim = context.User.Claims.FirstOrDefault(p => p.Type == "subscription");
 
-            var subscription = Convert.ToByte(claim!.Value);
-
-            return (Subscription)subscription;
+            return claim!.Value.ToEnum<Subscription>();
         }
 
         private bool IsSubscriptionExpired(HttpContext context)
@@ -69,7 +68,7 @@ namespace Presentation.Middlewares
 
             DateTime result = DateTime.ParseExact(dateString, format, provider);
 
-            return result > DateTime.UtcNow;
+            return result < DateTime.UtcNow;
         }
     }
 }

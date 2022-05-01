@@ -8,7 +8,6 @@ using Presentation.Middlewares.Validations;
 using Presentation.ViewModels.User;
 using System.Net;
 using Application.Dto.User;
-using Application.Services.Tenant;
 
 namespace Presentation.Controllers
 {

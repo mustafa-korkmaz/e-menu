@@ -2,8 +2,8 @@
 {
     public interface IUserRepository : IRepository<User.User>
     {
-        Task<User.User?> GetByUsernameAsync(string username);
+        Task<User.User> GetByUsernameAsync(string username);
 
-        Task<User.User?> GetByEmailAsync(string email);
+        Task<User.User> GetByEmailAsync(string email);
     }
 }

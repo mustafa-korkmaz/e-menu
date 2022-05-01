@@ -1,6 +1,7 @@
 using Presentation;
 using Infrastructure.UnitOfWork;
 using Infrastructure.Persistence.MongoDb;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using MongoDB.Driver;
 using Presentation.Middleware;
 using Presentation.Middlewares;
@@ -9,7 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+var defaultCorsPolicy = "default_cors_policy";
+
+// Add services to the container.
+
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        //prevent automatic 400-404 response
+        options.SuppressModelStateInvalidFilter = true;
+        options.SuppressMapClientErrors = true;
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,6 +38,19 @@ builder.Services.AddApplicationServices();
 //configure all mappings
 builder.Services.AddMappings();
 
+builder.Services.AddCors(config =>
+{
+    var policy = new CorsPolicy();
+    policy.Headers.Add("*");
+    policy.Methods.Add("*");
+    policy.Origins.Add("*");
+    //policy.SupportsCredentials = true;
+    config.AddPolicy(defaultCorsPolicy, policy);
+});
+
+builder.Services.ConfigureJwtAuthentication();
+builder.Services.ConfigureJwtAuthorization();
+
 var app = builder.Build();
 
 
@@ -35,7 +60,6 @@ await using (var scope = app.Services.CreateAsyncScope())
 } 
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
-app.UseMiddleware<TenantMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -47,6 +71,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseMiddleware<TenantMiddleware>();
 
 app.MapControllers();
 

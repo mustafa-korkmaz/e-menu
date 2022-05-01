@@ -10,7 +10,9 @@ using Application.Dto.User;
 using Domain.Aggregates.Product;
 using Domain.Aggregates.User;
 using System.IdentityModel.Tokens.Jwt;
+using Application.Enums;
 using Application.Services.Tenant;
+using Infrastructure.Services;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Services.Account
@@ -73,7 +75,9 @@ namespace Application.Services.Account
             userDto.Username = user.Username;
             userDto.Email = user.Email;
             userDto.CreatedAt = user.CreatedAt;
-
+            userDto.Subscription = (Subscription)user.Subscription;
+            userDto.SubscriptionExpiresAt = user.SubscriptionExpiresAt;
+           
             return GenerateToken(userDto);
         }
 
@@ -113,12 +117,15 @@ namespace Application.Services.Account
             }
 
             userDto.PasswordHash = HashPassword(password);
+            userDto.Subscription = Subscription.Free;
+            userDto.SubscriptionExpiresAt = DateTime.Now.AddYears(100).ToUniversalTime();
 
             var user = _mapper.Map<User>(userDto);
 
             await Repository.InsertOneAsync(user);
 
             userDto.Id = user.Id;
+            userDto.CreatedAt = user.CreatedAt;
         }
 
         public Task ResetAccountAsync(string emailOrUsername)
@@ -176,8 +183,8 @@ namespace Application.Services.Account
 
             claims.Add(new Claim("id", user.Id));
             claims.Add(new Claim("username", user.Username));
-            claims.Add(new Claim("subscription", user.Subscription.ToString()));
-            claims.Add(new Claim("subscription_exp", user.SubscriptionExpiresAt.ToString("MMddyyy")));
+            claims.Add(new Claim("subscription", user.Subscription.ResolveEnum()));
+            claims.Add(new Claim("subscription_exp", user.SubscriptionExpiresAt.ToString("MMddyyyy")));
 
             claims.Add(nameIdentifierClaim);
             claims.Add(emailClaim);

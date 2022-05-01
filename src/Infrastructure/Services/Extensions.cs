@@ -7,5 +7,15 @@ namespace Infrastructure.Services
         {
             return value.ToLowerInvariant();
         }
+
+        public static string ResolveEnum(this Enum c)
+        {
+            return c.ToString("G").ToLowerInvariant();
+        }
+
+        public static T ToEnum<T>(this string s)
+        {
+            return (T)Enum.Parse(typeof(T), s, true);
+        }
     }
 }

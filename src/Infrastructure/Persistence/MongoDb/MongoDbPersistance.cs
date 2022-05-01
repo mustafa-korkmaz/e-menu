@@ -15,10 +15,11 @@ namespace Infrastructure.Persistence.MongoDb
                    x.AutoMap();
                    x.MapIdMember(document => document.Id)
                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
+                   x.MapMember(x => x.CreatedBy).SetIgnoreIfNull(true);
                });
 
             await ProductMapping.ConfigureAsync(mongoContext);
-            //await OrderMapping.Configure(mongoContext);
+            await UserMapping.ConfigureAsync(mongoContext);
         }
     }
 }
