@@ -1,9 +1,9 @@
 ﻿using Application.Dto;
-using Application.Dto.Order;
+using Application.Dto.Menu;
 using Application.Dto.Product;
 using AutoMapper;
 using Domain.Aggregates;
-using Domain.Aggregates.Order;
+using Domain.Aggregates.Menu;
 using Domain.Aggregates.Product;
 using MongoDB.Bson;
 
@@ -21,22 +21,11 @@ namespace Application
 
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>()
-              .ConvertUsing(src => new Product(ObjectId.GenerateNewId().ToString(), src.CategoryId, src.MenuId, src.Name, src.ImageUrl, src.Price, (byte)src.Currency));
+              .ConvertUsing(src => new Product(ObjectId.GenerateNewId().ToString(), src.CategoryId, src.MenuId, src.Name, src.ImageUrl, src.Price, (byte)src.Currency, src.CreatedBy));
 
-            CreateMap<OrderItem, OrderItemDto>();
-            CreateMap<Order, OrderDto>();
-            CreateMap<OrderDto, Order>()
-                .ConvertUsing((src, dest) =>
-                {
-                    var order = new Order(ObjectId.GenerateNewId().ToString(), src.Username);
-
-                    foreach (var item in src.Items)
-                    {
-                        order.AddItem(item.ProductId, item.UnitPrice, item.Quantity);
-                    }
-
-                    return order;
-                });
+            CreateMap<Menu, MenuDto>();
+            CreateMap<MenuDto, Menu>()
+                .ConvertUsing((src) => new Menu(ObjectId.GenerateNewId().ToString(), src.UserId, src.Name, src.ImageUrl, src.UrlSlug, src.HasCategories));
         }
     }
 }

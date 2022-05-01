@@ -62,7 +62,7 @@ namespace Application.Services
 
             if (document == null)
             {
-                throw new ValidationException(ErrorMessages.RecordNotFound);
+                throw new ValidationException(ErrorCode.RecordNotFound);
             }
 
             var updatedDocument = Mapper.Map<TDto, TDocument>(dto);

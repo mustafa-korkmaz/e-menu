@@ -7,10 +7,14 @@ namespace Domain.Aggregates
         public string Id { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
+        public string? CreatedBy { get; protected set; }
+
+
         public Document(string id)
         {
             Id = id;
             CreatedAt = DateTime.UtcNow;
+            CreatedBy = null;
         }
     }
 

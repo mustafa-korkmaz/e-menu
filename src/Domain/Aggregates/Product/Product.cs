@@ -14,7 +14,9 @@
 
         public byte Currency { get; private set; }
 
-        public Product(string id, string? categoryId, string menuId, string name, string? imageUrl, decimal price, byte currency) : base(id)
+        public bool IsActive { get; private set; }
+
+        public Product(string id, string? categoryId, string menuId, string name, string? imageUrl, decimal price, byte currency, string createdBy) : base(id)
         {
             CategoryId = categoryId;
             MenuId = menuId;
@@ -22,7 +24,8 @@
             ImageUrl = imageUrl;
             Price = price;
             Currency = currency;
+            IsActive = true;
+            CreatedBy = createdBy;
         }
-
     }
 }

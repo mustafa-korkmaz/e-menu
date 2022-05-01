@@ -1,7 +1,7 @@
-﻿using Application.Services.Order;
+﻿using Application.Services.Menu;
 using Application.Services.Product;
+using Application.Services.Tenant;
 using Infrastructure.Configuration;
-using Infrastructure.Persistence.MongoDb;
 
 namespace Presentation
 {
@@ -29,8 +29,9 @@ namespace Presentation
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<ITenantContextService, TenantContextService>();
             services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IMenuService, MenuService>();
 
             return services;
         }

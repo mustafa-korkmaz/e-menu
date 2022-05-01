@@ -1,7 +1,9 @@
 ﻿namespace Domain.Aggregates.Product
 {
-    public interface IProductRepository : IRepository<Product>
+    public interface IUserRepository : IRepository<User.User>
     {
-        Task<IReadOnlyCollection<Product>> ListByIdsAsync(string[] ids);
+        Task<User.User?> GetByUsernameAsync(string username);
+
+        Task<User.User?> GetByEmailAsync(string email);
     }
 }

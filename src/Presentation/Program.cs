@@ -3,6 +3,7 @@ using Infrastructure.UnitOfWork;
 using Infrastructure.Persistence.MongoDb;
 using MongoDB.Driver;
 using Presentation.Middleware;
+using Presentation.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +31,11 @@ var app = builder.Build();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
-    MongoDbPersistence.ConfigureAsync(scope.ServiceProvider.GetRequiredService<IMongoContext>());
+    await MongoDbPersistence.ConfigureAsync(scope.ServiceProvider.GetRequiredService<IMongoContext>());
 } 
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
+app.UseMiddleware<TenantMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

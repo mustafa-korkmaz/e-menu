@@ -36,11 +36,11 @@ namespace Presentation.Middleware
                         break;
                     case RecordNotFoundException _:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
-                        message = ErrorMessages.RecordNotFound;
+                        message = ErrorCode.RecordNotFound;
                         break;
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        message = ErrorMessages.InternalServerError;
+                        message = ErrorCode.InternalServerError;
                         break;
                 }
 
