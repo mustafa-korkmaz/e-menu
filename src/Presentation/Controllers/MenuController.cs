@@ -3,13 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using Presentation.Middlewares.Validations;
 using Presentation.ViewModels;
 using System.Net;
+using Application.Constants;
 using Application.Dto.Menu;
 using Application.Services.Menu;
+using Microsoft.AspNetCore.Authorization;
 using Presentation.ViewModels.Menu;
 
 namespace Presentation.Controllers
 {
-    [ApiController]
+    [ApiController, Authorize(AppConstants.DefaultAuthorizationPolicy)]
     [Route("menus")]
     public class MenuController : ControllerBase
     {
@@ -37,13 +39,13 @@ namespace Presentation.Controllers
         [ProducesResponseType(typeof(MenuViewModel), (int)HttpStatusCode.Created)]
         public async Task<IActionResult> Post([FromBody] AddEditMenuViewModel model)
         {
-            var orderDto = _mapper.Map<MenuDto>(model);
+            var menuDto = _mapper.Map<MenuDto>(model);
 
-            await _menuService.AddAsync(orderDto);
+            await _menuService.AddAsync(menuDto);
 
-            var order = _mapper.Map<MenuViewModel>(orderDto);
+            var menuViewModel = _mapper.Map<MenuViewModel>(menuDto);
 
-            return Created($"orders/{order.Id}", order);
+            return Created($"menus/{menuViewModel.Id}", menuViewModel);
         }
 
         [ModelStateValidation]
@@ -51,11 +53,11 @@ namespace Presentation.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Put([FromRoute] string id, [FromBody] AddEditMenuViewModel model)
         {
-            var productDto = _mapper.Map<MenuDto>(model);
+            var menuDto = _mapper.Map<MenuDto>(model);
 
-            productDto.Id = id;
+            menuDto.Id = id;
 
-            await _menuService.UpdateAsync(productDto);
+            await _menuService.UpdateAsync(menuDto);
 
             return NoContent();
         }

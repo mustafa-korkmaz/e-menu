@@ -1,6 +1,4 @@
-﻿using Domain.Aggregates.Product;
-using Domain.Aggregates.User;
-using MongoDB.Bson;
+﻿using Domain.Aggregates.User;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
@@ -23,6 +21,7 @@ namespace Infrastructure.Persistence.MongoDb
             {
                 Unique = true
             };
+       
             var builder = Builders<User>.IndexKeys;
             var emailIndex = builder.Ascending(p => p.Email);
 

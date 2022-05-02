@@ -4,6 +4,7 @@ using Application.Dto.Product;
 using Application.Dto.User;
 using AutoMapper;
 using Infrastructure.Services;
+using MongoDB.Bson;
 using Presentation.ViewModels;
 using Presentation.ViewModels.Menu;
 using Presentation.ViewModels.Product;
@@ -17,7 +18,9 @@ namespace Presentation
         {
             CreateMap<AddUserViewModel, UserDto>()
                 .ForMember(dest => dest.Username, opt =>
-                    opt.MapFrom(source => source.Email));
+                    opt.MapFrom(source => source.Email))
+                .ForMember(dest => dest.Id, opt =>
+                opt.MapFrom(source => ObjectId.GenerateNewId().ToString()));
 
             CreateMap<UserDto, UserViewModel>()
                 .ForMember(dest => dest.Subscription, opt =>
@@ -27,11 +30,17 @@ namespace Presentation
                 .ForMember(dest => dest.Subscription, opt =>
                     opt.MapFrom(source => source.Subscription.ResolveEnum()));
 
-            CreateMap<AddEditProductViewModel, ProductDto>();
+            CreateMap<AddEditProductViewModel, ProductDto>()
+                .ForMember(dest => dest.Id, opt =>
+                    opt.MapFrom(source => ObjectId.GenerateNewId().ToString()));
+
             CreateMap<ProductDto, ProductViewModel>();
             CreateMap(typeof(ListDtoResponse<>), typeof(ListViewModelResponse<>));
 
-            CreateMap<AddEditMenuViewModel, MenuDto>();
+            CreateMap<AddEditMenuViewModel, MenuDto>()
+                .ForMember(dest => dest.Id, opt =>
+                opt.MapFrom(source => ObjectId.GenerateNewId().ToString()));
+
             CreateMap<MenuDto, MenuViewModel>();
         }
     }

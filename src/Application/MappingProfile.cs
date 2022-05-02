@@ -22,18 +22,18 @@ namespace Application
 
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>()
-                .ConvertUsing(src => new User(ObjectId.GenerateNewId().ToString(), src.Username.GetNormalized(), src.Email.GetNormalized(), src.IsEmailConfirmed, src.PasswordHash, (byte)src.Subscription, src.SubscriptionExpiresAt));
+                .ConvertUsing(src => new User(src.Id, src.Username.GetNormalized(), src.Email.GetNormalized(), src.IsEmailConfirmed, src.PasswordHash, (byte)src.Subscription, src.SubscriptionExpiresAt));
 
 
             CreateMap(typeof(ListDocumentResponse<>), typeof(ListDtoResponse<>));
 
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>()
-              .ConvertUsing(src => new Product(ObjectId.GenerateNewId().ToString(), src.CategoryId, src.MenuId, src.Name, src.ImageUrl, src.Price, (byte)src.Currency, src.CreatedBy));
+              .ConvertUsing(src => new Product(src.Id, src.CategoryId, src.MenuId, src.Name, src.ImageUrl, src.Price, (byte)src.Currency, src.CreatedBy));
 
             CreateMap<Menu, MenuDto>();
             CreateMap<MenuDto, Menu>()
-                .ConvertUsing((src) => new Menu(ObjectId.GenerateNewId().ToString(), src.UserId, src.Name, src.ImageUrl, src.UrlSlug, src.HasCategories));
+                .ConvertUsing((src) => new Menu(src.Id, src.UserId, src.Name, src.ImageUrl, src.UrlSlug, src.HasCategories));
         }
     }
 }

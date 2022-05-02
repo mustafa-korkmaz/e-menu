@@ -120,12 +120,7 @@ namespace Application.Services.Account
             userDto.Subscription = Subscription.Free;
             userDto.SubscriptionExpiresAt = DateTime.Now.AddYears(100).ToUniversalTime();
 
-            var user = _mapper.Map<User>(userDto);
-
-            await Repository.InsertOneAsync(user);
-
-            userDto.Id = user.Id;
-            userDto.CreatedAt = user.CreatedAt;
+            await AddAsync(userDto);
         }
 
         public Task ResetAccountAsync(string emailOrUsername)

@@ -16,6 +16,7 @@ namespace Presentation.ViewModels.Menu
 
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [StringLength(50, ErrorMessage = ValidationErrorCode.MaxLength)]
+        [RegularExpression("^[a-zA-Z0-9_-]*$", ErrorMessage = ValidationErrorCode.AlphaNumericCharsAllowed)]
         [Display(Name = "URL_SLUG")]
         public string? UrlSlug { get; set; }
 

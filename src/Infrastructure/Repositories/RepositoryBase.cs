@@ -75,10 +75,10 @@ namespace Infrastructure.Repositories
             await Collection.FindOneAndReplaceAsync(session, filter, document);
         }
 
-        public Task<TDocument> GetByIdAsync(string id)
+        public async Task<TDocument?> GetByIdAsync(string id)
         {
             var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, id);
-            return Collection.Find(filter).SingleOrDefaultAsync();
+            return await Collection.Find(filter).SingleOrDefaultAsync();
         }
 
         public async Task DeleteByIdAsync(string id)
