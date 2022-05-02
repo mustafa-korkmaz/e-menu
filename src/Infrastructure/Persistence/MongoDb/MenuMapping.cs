@@ -21,6 +21,15 @@ namespace Infrastructure.Persistence.MongoDb
                     .SetSerializer(new StringSerializer(BsonType.ObjectId));
             });
 
+            BsonClassMap.RegisterClassMap<Category>(map =>
+            {
+                map.AutoMap();
+                map.SetIgnoreExtraElements(true);
+                map.MapMember(x => x.Name).SetIsRequired(true);
+                map.MapMember(x => x.Id).SetIsRequired(true)
+                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
+            });
+
             var options = new CreateIndexOptions
             {
                 Unique = true

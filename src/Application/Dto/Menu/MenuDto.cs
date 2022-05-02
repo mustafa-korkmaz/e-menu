@@ -11,6 +11,8 @@ namespace Application.Dto.Menu
 
         public string UrlSlug { get; set; } = string.Empty;
 
+        public ICollection<CategoryDto> Categories = new List<CategoryDto>();
+
         public bool HasCategories { get; set; }
     }
 }

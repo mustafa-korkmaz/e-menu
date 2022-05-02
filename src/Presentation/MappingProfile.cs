@@ -35,13 +35,23 @@ namespace Presentation
                     opt.MapFrom(source => ObjectId.GenerateNewId().ToString()));
 
             CreateMap<ProductDto, ProductViewModel>();
+
             CreateMap(typeof(ListDtoResponse<>), typeof(ListViewModelResponse<>));
+
+            CreateMap<ListViewModelRequest, ListDtoRequest>();
+            CreateMap(typeof(ListViewModelRequest<>), typeof(ListDtoRequest<>));
+
 
             CreateMap<AddEditMenuViewModel, MenuDto>()
                 .ForMember(dest => dest.Id, opt =>
                 opt.MapFrom(source => ObjectId.GenerateNewId().ToString()));
 
             CreateMap<MenuDto, MenuViewModel>();
+            CreateMap<CategoryDto, CategoryViewModel>();
+
+            CreateMap<AddCategoryViewModel, CategoryDto>()
+                .ForMember(dest => dest.Id, opt =>
+                opt.MapFrom(source => ObjectId.GenerateNewId().ToString()));
         }
     }
 }

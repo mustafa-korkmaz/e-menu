@@ -10,6 +10,8 @@
 
         public const string UrlSlugAlreadyExists = "URL_SLUG_ALREADY_EXISTS";
 
+        public const string CategoryAlreadyExists = "CATEGORY_ALREADY_EXISTS";
+            
         public const string InternalServerError = "INTERNAL_SERVER_ERROR";
 
         public const string IncorrectUsernameOrPassword = "INCORRECT_USERNAME_OR_PASSWORD";

@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using Application.Constants;
 
 namespace Presentation.ViewModels.Menu
 {
-    public class AddEditMenuViewModel
+    public class AddCategoryViewModel
     {
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [StringLength(50, ErrorMessage = ValidationErrorCode.MaxLength)]
@@ -15,9 +16,7 @@ namespace Presentation.ViewModels.Menu
         public string? ImageUrl { get; set; }
 
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
-        [StringLength(50, ErrorMessage = ValidationErrorCode.MaxLength)]
-        [RegularExpression("^[a-zA-Z0-9_-]*$", ErrorMessage = ValidationErrorCode.AlphaNumericCharsAllowed)]
-        [Display(Name = "URL_SLUG")]
-        public string? UrlSlug { get; set; }
+        [Display(Name = "DISPLAY_ORDER")]
+        public short? DisplayOrder { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Presentation.Middlewares.Validations;
 using System.ComponentModel.DataAnnotations;
+using Application.Constants;
 
 namespace Presentation.ViewModels
 {
@@ -14,7 +15,8 @@ namespace Presentation.ViewModels
     {
         public int Offset { get; set; }
 
-        [Range(1, 1000)]
+        [Range(1, 1000, ErrorMessage = ValidationErrorCode.BetweenRange)]
+        [Display(Name = "LIMIT")]
         public int Limit { get; set; }
     }
 
@@ -24,7 +26,7 @@ namespace Presentation.ViewModels
     /// <typeparam name="TSearchCriteria"></typeparam>
     public class ListViewModelRequest<TSearchCriteria> : ListViewModelRequest
     {
-        public TSearchCriteria SearchCriteria { get; set; }
+        public TSearchCriteria SearchCriteria { get; set; } = default!;
     }
 
     public class ListViewModelResponse<TViewModel> where TViewModel : class
@@ -32,7 +34,7 @@ namespace Presentation.ViewModels
         /// <summary>
         /// Paged list items
         /// </summary>
-        public IReadOnlyCollection<TViewModel> Items { get; set; }
+        public IReadOnlyCollection<TViewModel> Items { get; set; } = new List<TViewModel>();
 
         /// <summary>
         /// Total count of items stored in repository

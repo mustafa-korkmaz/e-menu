@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Presentation.Middlewares.Validations;
 using Presentation.ViewModels;
 using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Application.Constants;
+using Application.Dto;
 using Application.Dto.Menu;
 using Application.Services.Menu;
 using Microsoft.AspNetCore.Authorization;
@@ -29,9 +32,13 @@ namespace Presentation.Controllers
         [ProducesResponseType(typeof(ListViewModelResponse<MenuViewModel>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Search([FromQuery] ListViewModelRequest model)
         {
-            var resp = await ListAsync(model);
+            var requestDto = _mapper.Map<ListDtoRequest>(model);
 
-            return Ok(resp);
+            var resp = await _menuService.ListAsync(requestDto);
+
+            var viewModelResp = _mapper.Map<ListViewModelResponse<MenuViewModel>>(resp);
+
+            return Ok(viewModelResp);
         }
 
         [ModelStateValidation]
@@ -46,6 +53,28 @@ namespace Presentation.Controllers
             var menuViewModel = _mapper.Map<MenuViewModel>(menuDto);
 
             return Created($"menus/{menuViewModel.Id}", menuViewModel);
+        }
+
+        [ModelStateValidation]
+        [HttpPost("{id}/categories")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> AddCategory([FromRoute] string id, [FromBody] AddCategoryViewModel model)
+        {
+            var categoryDto = _mapper.Map<CategoryDto>(model);
+
+            await _menuService.AddCategoryAsync(id, categoryDto);
+
+            return Ok();
+        }
+
+        [ModelStateValidation]
+        [HttpDelete("{id}/categories/{categoryId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteCategory([FromRoute] string id, [FromRoute] string categoryId)
+        {
+            await _menuService.DeleteCategoryAsync(id, categoryId);
+
+            return Ok();
         }
 
         [ModelStateValidation]
@@ -69,14 +98,6 @@ namespace Presentation.Controllers
             await _menuService.DeleteByIdAsync(id);
 
             return NoContent();
-        }
-
-        private async Task<ListViewModelResponse<MenuViewModel>> ListAsync(ListViewModelRequest model)
-        {
-            return null;
-            //var resp = await _menuService.ListAsync(model.Offset, model.Limit);
-
-            //return _mapper.Map<ListViewModelResponse<OrderViewModel>>(resp);
         }
     }
 }

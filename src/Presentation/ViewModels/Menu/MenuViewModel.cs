@@ -9,6 +9,6 @@ namespace Presentation.ViewModels.Menu
 
         public string UrlSlug { get; set; } = string.Empty;
 
-        public bool HasCategories { get; set; }
+        public IReadOnlyCollection<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
     }
 }

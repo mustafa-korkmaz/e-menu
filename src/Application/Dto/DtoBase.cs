@@ -9,6 +9,22 @@ namespace Application.Dto
         public string CreatedBy { get; set; } = string.Empty;
     }
 
+    public class ListDtoRequest
+    {
+        public int Offset { get; set; }
+
+        public int Limit { get; set; }
+    }
+
+    /// <summary>
+    /// for specific searches which requires extra filters
+    /// </summary>
+    /// <typeparam name="TSearchCriteria"></typeparam>
+    public class ListDtoRequest<TSearchCriteria> : ListDtoRequest
+    {
+        public TSearchCriteria SearchCriteria { get; set; } = default!;
+    }
+
     public class ListDtoResponse<TDto> where TDto : DtoBase
     {
         /// <summary>

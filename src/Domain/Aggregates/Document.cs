@@ -25,6 +25,22 @@ namespace Domain.Aggregates
         DateTime CreatedAt { get; }
     }
 
+    public class ListDocumentRequest
+    {
+        public int Offset { get; set; }
+
+        public int Limit { get; set; }
+    }
+
+    /// <summary>
+    /// for specific searches which requires extra filters
+    /// </summary>
+    /// <typeparam name="TSearchCriteria"></typeparam>
+    public class ListDocumentRequest<TSearchCriteria> : ListDocumentRequest
+    {
+        public TSearchCriteria SearchCriteria { get; set; } = default!;
+    }
+
     public class ListDocumentResponse<TDocument> where TDocument : IDocument
     {
         /// <summary>

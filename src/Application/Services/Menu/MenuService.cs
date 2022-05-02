@@ -1,8 +1,10 @@
 ﻿using Application.Constants;
+using Application.Dto;
 using Application.Dto.Menu;
 using Application.Exceptions;
 using Application.Services.Tenant;
 using AutoMapper;
+using Domain.Aggregates;
 using Domain.Aggregates.Menu;
 using Infrastructure.UnitOfWork;
 using Microsoft.Extensions.Logging;
@@ -46,18 +48,80 @@ namespace Application.Services.Menu
             await Repository.ReplaceOneAsync(menu);
         }
 
-        private async Task ValidateUpdateAsync(Domain.Aggregates.Menu.Menu? menu, MenuDto menuDto)
+        public override async Task DeleteByIdAsync(string id)
+        {
+            var menu = await Repository.GetByIdAsync(id);
+
+            ValidateMenuOwnership(menu);
+
+            await base.DeleteByIdAsync(id);
+        }
+
+        public async Task AddCategoryAsync(string menuId, CategoryDto dto)
+        {
+            var menu = await Repository.GetByIdAsync(menuId);
+
+            ValidateAddCategory(menu, dto.Name);
+
+            menu!.AddCategory(dto.Id, dto.Name, dto.ImageUrl, dto.DisplayOrder);
+
+            await Repository.ReplaceOneAsync(menu);
+        }
+
+        public async Task DeleteCategoryAsync(string menuId, string categoryId)
+        {
+            var menu = await Repository.GetByIdAsync(menuId);
+
+            ValidateMenuOwnership(menu);
+
+            menu!.RemoveCategory(categoryId);
+
+            await Repository.ReplaceOneAsync(menu);
+        }
+
+        public async Task<ListDtoResponse<MenuDto>> ListAsync(ListDtoRequest request)
+        {
+            var req = new ListDocumentRequest<string>
+            {
+                Offset = request.Offset,
+                Limit = request.Limit,
+                SearchCriteria = _tenantContextService.TenantContext.UserId!
+            };
+
+            var response = await Repository.ListAsync(req);
+
+            return Mapper.Map<ListDtoResponse<MenuDto>>(response);
+        }
+
+        private void ValidateMenuOwnership(Domain.Aggregates.Menu.Menu? menu)
         {
             if (menu == null || menu.UserId != _tenantContextService.TenantContext.UserId!)
             {
                 throw new ValidationException(ErrorCode.MenuNotFound);
             }
+        }
 
-            var existingUrlSlug = await Repository.GetByUrlSlugAsync(menuDto.UrlSlug);
+        private async Task ValidateUpdateAsync(Domain.Aggregates.Menu.Menu? menu, MenuDto menuDto)
+        {
+            ValidateMenuOwnership(menu);
 
-            if (existingUrlSlug != null && existingUrlSlug.Id != menu.Id)
+            var existingMenuWithDesiredUrlSlug = await Repository.GetByUrlSlugAsync(menuDto.UrlSlug);
+
+            if (existingMenuWithDesiredUrlSlug != null && existingMenuWithDesiredUrlSlug.Id != menu!.Id)
             {
                 throw new ValidationException(ErrorCode.UrlSlugAlreadyExists);
+            }
+        }
+
+        private void ValidateAddCategory(Domain.Aggregates.Menu.Menu? menu, string categoryName)
+        {
+            ValidateMenuOwnership(menu);
+
+            var categoryExists = menu!.HasCategory(categoryName);
+
+            if (categoryExists)
+            {
+                throw new ValidationException(ErrorCode.CategoryAlreadyExists);
             }
         }
     }
