@@ -6,11 +6,12 @@ using Presentation.Middlewares.Validations;
 using Presentation.ViewModels;
 using Presentation.ViewModels.Product;
 using System.Net;
-using MongoDB.Bson;
+using Application.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers
 {
-    [ApiController]
+    [ApiController, Authorize(AppConstants.DefaultAuthorizationPolicy)]
     [Route("products")]
     public class ProductController : ControllerBase
     {
@@ -37,7 +38,7 @@ namespace Presentation.Controllers
         [ProducesResponseType(typeof(ProductViewModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromRoute] ObjectIdViewModel model)
         {
-            var o = await _productService.GetByIdAsync(model.id);
+            var o = await _productService.GetByIdAsync(model.id!);
 
             if (o == null)
             {
@@ -56,9 +57,6 @@ namespace Presentation.Controllers
         {
             var productDto = _mapper.Map<ProductDto>(model);
 
-            productDto.MenuId = ObjectId.GenerateNewId().ToString();
-            productDto.CategoryId = ObjectId.GenerateNewId().ToString();
-
             await _productService.AddAsync(productDto);
 
             var product = _mapper.Map<ProductViewModel>(productDto);
@@ -69,11 +67,11 @@ namespace Presentation.Controllers
         [ModelStateValidation]
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Put([FromRoute] string id, [FromBody] AddEditProductViewModel model)
+        public async Task<IActionResult> Put([FromRoute] ObjectIdViewModel idModel, [FromBody] AddEditProductViewModel model)
         {
             var productDto = _mapper.Map<ProductDto>(model);
 
-            productDto.Id = id;
+            productDto.Id = idModel.id!;
 
             await _productService.UpdateAsync(productDto);
 
@@ -82,9 +80,9 @@ namespace Presentation.Controllers
 
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Delete([FromRoute] string id)
+        public async Task<IActionResult> Delete([FromRoute] ObjectIdViewModel idModel)
         {
-            await _productService.DeleteByIdAsync(id);
+            await _productService.DeleteByIdAsync(idModel.id!);
 
             return NoContent();
         }

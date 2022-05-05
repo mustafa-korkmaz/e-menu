@@ -2,6 +2,7 @@
 using Application.Dto.Menu;
 using Application.Dto.Product;
 using Application.Dto.User;
+using Application.Enums;
 using AutoMapper;
 using Infrastructure.Services;
 using MongoDB.Bson;
@@ -31,16 +32,21 @@ namespace Presentation
                     opt.MapFrom(source => source.Subscription.ResolveEnum()));
 
             CreateMap<AddEditProductViewModel, ProductDto>()
+                .ForMember(dest => dest.IsActive, opt =>
+                    opt.MapFrom(source => true))
+                .ForMember(dest => dest.Currency, opt =>
+                    opt.MapFrom(source => source.Currency!.ToEnum<Currency>()))
                 .ForMember(dest => dest.Id, opt =>
                     opt.MapFrom(source => ObjectId.GenerateNewId().ToString()));
 
-            CreateMap<ProductDto, ProductViewModel>();
+            CreateMap<ProductDto, ProductViewModel>()
+                .ForMember(dest => dest.Currency, opt =>
+                    opt.MapFrom(source => source.Currency.ResolveEnum()));
 
             CreateMap(typeof(ListDtoResponse<>), typeof(ListViewModelResponse<>));
 
             CreateMap<ListViewModelRequest, ListDtoRequest>();
             CreateMap(typeof(ListViewModelRequest<>), typeof(ListDtoRequest<>));
-
 
             CreateMap<AddEditMenuViewModel, MenuDto>()
                 .ForMember(dest => dest.Id, opt =>

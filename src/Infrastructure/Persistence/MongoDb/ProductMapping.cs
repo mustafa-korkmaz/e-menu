@@ -14,9 +14,11 @@ namespace Infrastructure.Persistence.MongoDb
             {
                 map.AutoMap();
                 map.SetIgnoreExtraElements(true);
+                map.MapMember(x => x.ImageUrl).SetIgnoreIfNull(true);
+                map.MapMember(x => x.Name).SetIsRequired(true);
                 map.MapMember(x => x.MenuId).SetIsRequired(true)
                     .SetSerializer(new StringSerializer(BsonType.ObjectId));
-                map.MapMember(x => x.CategoryId).SetIsRequired(true)
+                map.MapMember(x => x.CategoryId).SetIgnoreIfNull(true)
                     .SetSerializer(new StringSerializer(BsonType.ObjectId));
             });
 

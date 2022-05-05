@@ -17,8 +17,6 @@ namespace Infrastructure.Persistence.MongoDb
                 map.MapMember(x=>x.ImageUrl).SetIgnoreIfNull(true);
                 map.MapMember(x => x.UrlSlug).SetIsRequired(true);
                 map.MapMember(x => x.Name).SetIsRequired(true);
-                map.MapMember(x => x.UserId).SetIsRequired(true)
-                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
             });
 
             BsonClassMap.RegisterClassMap<Category>(map =>

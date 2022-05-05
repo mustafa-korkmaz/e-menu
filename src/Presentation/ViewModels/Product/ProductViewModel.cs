@@ -2,12 +2,20 @@
 {
     public class ProductViewModel : ViewModelBase
     {
-        public string Sku { get; set; }
+        public string MenuId { get; set; } = string.Empty;
 
-        public string Name { get; set; }
+        public string? CategoryId { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        public decimal Price { get; set; }
 
-        public int StockQuantity { get; set; }
+        public string Name { get; set; } = string.Empty;
+
+        public string? ImageUrl { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public short DisplayOrder { get; set; }
+
+        public string Currency { get; set; } = string.Empty;
     }
 }

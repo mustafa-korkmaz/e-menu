@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
         {
             var response = new ListDocumentResponse<Menu>();
 
-            var filter = Builders<Menu>.Filter.Eq(doc => doc.UserId, request.SearchCriteria);
+            var filter = Builders<Menu>.Filter.Eq(doc => doc.CreatedBy, request.SearchCriteria);
 
             var docs = Collection.Find(filter);
 

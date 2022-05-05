@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Presentation.Middlewares.Validations;
 using Presentation.ViewModels;
 using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Application.Constants;
 using Application.Dto;
 using Application.Dto.Menu;
@@ -57,22 +55,24 @@ namespace Presentation.Controllers
 
         [ModelStateValidation]
         [HttpPost("{id}/categories")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddCategory([FromRoute] string id, [FromBody] AddCategoryViewModel model)
+        [ProducesResponseType(typeof(CategoryViewModel), (int)HttpStatusCode.Created)]
+        public async Task<IActionResult> AddCategory([FromRoute] ObjectIdViewModel idModel, [FromBody] AddCategoryViewModel model)
         {
             var categoryDto = _mapper.Map<CategoryDto>(model);
 
-            await _menuService.AddCategoryAsync(id, categoryDto);
+            await _menuService.AddCategoryAsync(idModel.id!, categoryDto);
 
-            return Ok();
+            var catViewModel = _mapper.Map<CategoryViewModel>(categoryDto);
+
+            return Created($"menus/{idModel.id}/categories/{catViewModel.Id}", catViewModel);
         }
 
         [ModelStateValidation]
         [HttpDelete("{id}/categories/{categoryId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteCategory([FromRoute] string id, [FromRoute] string categoryId)
+        public async Task<IActionResult> DeleteCategory([FromRoute] ObjectIdViewModel idModel, [FromRoute] string categoryId)
         {
-            await _menuService.DeleteCategoryAsync(id, categoryId);
+            await _menuService.DeleteCategoryAsync(idModel.id!, categoryId);
 
             return Ok();
         }
@@ -80,11 +80,11 @@ namespace Presentation.Controllers
         [ModelStateValidation]
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Put([FromRoute] string id, [FromBody] AddEditMenuViewModel model)
+        public async Task<IActionResult> Put([FromRoute] ObjectIdViewModel idModel, [FromBody] AddEditMenuViewModel model)
         {
             var menuDto = _mapper.Map<MenuDto>(model);
 
-            menuDto.Id = id;
+            menuDto.Id = idModel.id!;
 
             await _menuService.UpdateAsync(menuDto);
 

@@ -23,7 +23,7 @@ namespace Application.Services.Menu
 
         public override async Task AddAsync(MenuDto dto)
         {
-            dto.UserId = _tenantContextService.TenantContext.UserId!;
+            dto.CreatedBy = _tenantContextService.TenantContext.UserId!;
 
             var existingUrlSlug = await Repository.GetByUrlSlugAsync(dto.UrlSlug);
 
@@ -41,11 +41,12 @@ namespace Application.Services.Menu
 
             await ValidateUpdateAsync(document, dto);
 
-            dto.UserId = document!.UserId;
+            document!.SetName(dto.Name);
+            document.SetUrlSlug(dto.UrlSlug);
+            document.SetImageUrl(dto.ImageUrl);
+            document.SetIsPublished(dto.IsPublished);
 
-            var menu = Mapper.Map<Domain.Aggregates.Menu.Menu>(dto);
-
-            await Repository.ReplaceOneAsync(menu);
+            await Repository.ReplaceOneAsync(document);
         }
 
         public override async Task DeleteByIdAsync(string id)
@@ -95,7 +96,7 @@ namespace Application.Services.Menu
 
         private void ValidateMenuOwnership(Domain.Aggregates.Menu.Menu? menu)
         {
-            if (menu == null || menu.UserId != _tenantContextService.TenantContext.UserId!)
+            if (menu == null || menu.CreatedBy != _tenantContextService.TenantContext.UserId!)
             {
                 throw new ValidationException(ErrorCode.MenuNotFound);
             }
@@ -117,7 +118,7 @@ namespace Application.Services.Menu
         {
             ValidateMenuOwnership(menu);
 
-            var categoryExists = menu!.HasCategory(categoryName);
+            var categoryExists = menu!.HasCategoryByName(categoryName);
 
             if (categoryExists)
             {

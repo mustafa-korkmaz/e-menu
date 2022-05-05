@@ -31,7 +31,7 @@ namespace Application
 
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>()
-              .ConvertUsing(src => new Product(src.Id, src.CategoryId, src.MenuId, src.Name, src.ImageUrl, src.Price, (byte)src.Currency, src.CreatedBy));
+              .ConvertUsing(src => new Product(src.Id, src.CategoryId, src.MenuId, src.Name, src.ImageUrl, src.Price, (byte)src.Currency, src.DisplayOrder, src.CreatedBy));
 
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>()
@@ -39,7 +39,7 @@ namespace Application
 
             CreateMap<Menu, MenuDto>();
             CreateMap<MenuDto, Menu>()
-                .ConvertUsing((src) => new Menu(src.Id, src.UserId, src.Name, src.ImageUrl, src.UrlSlug));
+                .ConvertUsing((src) => new Menu(src.Id, src.CreatedBy, src.Name, src.ImageUrl, src.UrlSlug, src.IsPublished));
         }
     }
 }

@@ -16,7 +16,9 @@
 
         public bool IsActive { get; private set; }
 
-        public Product(string id, string? categoryId, string menuId, string name, string? imageUrl, decimal price, byte currency, string createdBy) : base(id)
+        public short DisplayOrder { get; private set; }
+
+        public Product(string id, string? categoryId, string menuId, string name, string? imageUrl, decimal price, byte currency, short displayOrder, string createdBy) : base(id)
         {
             CategoryId = categoryId;
             MenuId = menuId;
@@ -25,6 +27,7 @@
             Price = price;
             Currency = currency;
             IsActive = true;
+            DisplayOrder = displayOrder;
             CreatedBy = createdBy;
         }
     }

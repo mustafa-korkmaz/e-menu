@@ -5,16 +5,21 @@ namespace Presentation.Middlewares.Validations
 {
     public class ObjectIdValidationAttribute : ValidationAttribute
     {
+        public bool AllowNull { get; set; }
+
         public override bool IsValid(object? value)
         {
-            if (value == null) return false;
+            if (AllowNull && value == null)
+            {
+                return true;
+            }
 
-            return ObjectId.TryParse(value.ToString(), out _);
+            return ObjectId.TryParse(value?.ToString(), out _);
         }
 
         public override string FormatErrorMessage(string name)
         {
-            return $"{name} field does not have an applicable ID";
+            return $"{name}_FIELD_VALUE_IS_INCORRECT";
         }
     }
 }

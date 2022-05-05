@@ -16,5 +16,9 @@ namespace Application.Dto.Product
         public decimal Price { get; set; }
 
         public Currency Currency { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public short DisplayOrder { get; set; }
     }
 }

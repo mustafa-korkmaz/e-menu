@@ -4,11 +4,9 @@ namespace Domain.Aggregates.Menu
 {
     public class Menu : Document
     {
-        public string UserId { get; private set; }
-
         public string Name { get; private set; }
 
-        public string ImageUrl { get; private set; }
+        public string? ImageUrl { get; private set; }
 
         public string UrlSlug { get; private set; }
 
@@ -24,25 +22,33 @@ namespace Domain.Aggregates.Menu
                 _categories = value.ToList();
         }
 
+        public bool IsPublished { get; private set; }
+
         public bool HasCategories => _categories.Any();
 
-        public Menu(string id, string userId, string name, string imageUrl, string urlSlug) : base(id)
+        public Menu(string id, string userId, string name, string? imageUrl, string urlSlug, bool isPublished) : base(id)
         {
             Name = name;
-            UserId = userId;
+            CreatedBy = userId;
             ImageUrl = imageUrl;
             UrlSlug = urlSlug;
             _categories = new List<Category>();
+            IsPublished = isPublished;
         }
 
-        public bool HasCategory(string name)
+        public bool HasCategoryByName(string name)
         {
             return _categories.Any(c => string.Equals(c.Name, name, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public bool HasCategoryById(string id)
+        {
+            return _categories.Any(c => c.Id == id);
+        }
+
         public void AddCategory(string id, string name, string? imageUrl, short displayOrder)
         {
-            if (HasCategory(name))
+            if (HasCategoryByName(name))
             {
                 throw new DuplicateNameException(nameof(name));
             }
@@ -56,6 +62,24 @@ namespace Domain.Aggregates.Menu
 
             if (c != null)
                 _categories.Remove(c);
+        }
+
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+
+        public void SetUrlSlug(string urlSlug)
+        {
+            UrlSlug = urlSlug;
+        }
+        public void SetImageUrl(string? imageUrl)
+        {
+            ImageUrl = imageUrl;
+        }
+        public void SetIsPublished(bool isPublished)
+        {
+            IsPublished = isPublished;
         }
     }
 }

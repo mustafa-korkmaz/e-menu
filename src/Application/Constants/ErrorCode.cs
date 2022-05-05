@@ -8,6 +8,10 @@
 
         public const string MenuNotFound = "MENU_NOT_FOUND";
 
+        public const string CategoryNotFound = "CATEGORY_NOT_FOUND";
+
+        public const string CategoryIsRequired = "CATEGORY_IS_REQUIRED";
+
         public const string UrlSlugAlreadyExists = "URL_SLUG_ALREADY_EXISTS";
 
         public const string CategoryAlreadyExists = "CATEGORY_ALREADY_EXISTS";
