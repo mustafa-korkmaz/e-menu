@@ -65,7 +65,12 @@ namespace Application.Services
                 throw new ValidationException(ErrorCode.RecordNotFound);
             }
 
+            var createdAt = document.CreatedAt;
+            dto.CreatedBy = document.CreatedBy;
+
             var updatedDocument = Mapper.Map<TDto, TDocument>(dto);
+
+            updatedDocument.SetCreatedAt(createdAt);
 
             await Repository.ReplaceOneAsync(updatedDocument);
         }

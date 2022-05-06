@@ -14,9 +14,12 @@ namespace Infrastructure.Persistence.MongoDb
                {
                    x.AutoMap();
                    x.MapIdMember(document => document.Id)
-                   .SetSerializer(new StringSerializer(BsonType.ObjectId));
-                   x.MapMember(document => document.CreatedBy).SetIgnoreIfNull(true)
-                       .SetSerializer(new StringSerializer(BsonType.ObjectId));
+                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
+                 
+                   x.MapMember(document => document.CreatedBy)
+                    .SetDefaultValue(() => null)
+                    .SetIgnoreIfNull(true)
+                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
                });
 
             await ProductMapping.ConfigureAsync(mongoContext);

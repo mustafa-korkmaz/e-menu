@@ -46,7 +46,6 @@ namespace Presentation
             CreateMap(typeof(ListDtoResponse<>), typeof(ListViewModelResponse<>));
 
             CreateMap<ListViewModelRequest, ListDtoRequest>();
-            CreateMap(typeof(ListViewModelRequest<>), typeof(ListDtoRequest<>));
 
             CreateMap<AddEditMenuViewModel, MenuDto>()
                 .ForMember(dest => dest.Id, opt =>

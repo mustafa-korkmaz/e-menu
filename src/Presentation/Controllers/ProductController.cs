@@ -7,12 +7,13 @@ using Presentation.ViewModels;
 using Presentation.ViewModels.Product;
 using System.Net;
 using Application.Constants;
+using Application.Dto;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers
 {
     [ApiController, Authorize(AppConstants.DefaultAuthorizationPolicy)]
-    [Route("products")]
+    [Route("menus/{menuId}/products")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -27,35 +28,30 @@ namespace Presentation.Controllers
         [ModelStateValidation]
         [HttpGet]
         [ProducesResponseType(typeof(ListViewModelResponse<ProductViewModel>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Search([FromQuery] ListViewModelRequest model)
+        public async Task<IActionResult> Search([FromRoute] MenuIdViewModel menuIdModel, [FromQuery] ListViewModelRequest model)
         {
-            var resp = await ListAsync(model);
-
-            return Ok(resp);
-        }
-
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ProductViewModel), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Get([FromRoute] ObjectIdViewModel model)
-        {
-            var o = await _productService.GetByIdAsync(model.id!);
-
-            if (o == null)
+            var searchReq = new ListDtoRequest<string>
             {
-                return NotFound();
-            }
+                Limit = model.Limit,
+                Offset = model.Offset,
+                SearchCriteria = menuIdModel.menuId!
+            };
 
-            var viewMmodel = _mapper.Map<ProductViewModel>(o);
+            var resp = await _productService.ListAsync(searchReq);
 
-            return Ok(viewMmodel);
+            var listViewModel = _mapper.Map<ListViewModelResponse<ProductViewModel>>(resp);
+
+            return Ok(listViewModel);
         }
 
         [ModelStateValidation]
         [HttpPost]
         [ProducesResponseType(typeof(ProductViewModel), (int)HttpStatusCode.Created)]
-        public async Task<IActionResult> Post([FromBody] AddEditProductViewModel model)
+        public async Task<IActionResult> Post([FromRoute] MenuIdViewModel menuIdModel, [FromBody] AddEditProductViewModel model)
         {
             var productDto = _mapper.Map<ProductDto>(model);
+
+            productDto.MenuId = menuIdModel.menuId!;
 
             await _productService.AddAsync(productDto);
 
@@ -67,9 +63,11 @@ namespace Presentation.Controllers
         [ModelStateValidation]
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Put([FromRoute] ObjectIdViewModel idModel, [FromBody] AddEditProductViewModel model)
+        public async Task<IActionResult> Put([FromRoute] MenuIdViewModel menuIdModel, [FromRoute] ObjectIdViewModel idModel, [FromBody] AddEditProductViewModel model)
         {
             var productDto = _mapper.Map<ProductDto>(model);
+
+            productDto.MenuId = menuIdModel.menuId!;
 
             productDto.Id = idModel.id!;
 
@@ -80,18 +78,11 @@ namespace Presentation.Controllers
 
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Delete([FromRoute] ObjectIdViewModel idModel)
+        public async Task<IActionResult> Delete([FromRoute] MenuIdViewModel menuIdModel, [FromRoute] ObjectIdViewModel idModel)
         {
-            await _productService.DeleteByIdAsync(idModel.id!);
+            await _productService.DeleteAsync(new ProductDto { Id = idModel.id!, MenuId = menuIdModel.menuId! });
 
             return NoContent();
-        }
-
-        private async Task<ListViewModelResponse<ProductViewModel>> ListAsync(ListViewModelRequest model)
-        {
-           // var resp = await _productService.ListAsync(model.Offset, model.Limit);
-           return null;
-           // return _mapper.Map<ListViewModelResponse<ProductViewModel>>(resp);
         }
     }
 }

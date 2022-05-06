@@ -7,10 +7,6 @@ namespace Presentation.ViewModels.Product
 {
     public class AddEditProductViewModel
     {
-        [ObjectIdValidation]
-        [Display(Name = "MENU_ID")]
-        public string? MenuId { get; set; }
-
         [ObjectIdValidation(AllowNull = true)]
         [Display(Name = "CATEGORY_ID")]
         public string? CategoryId { get; set; }

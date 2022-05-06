@@ -25,17 +25,17 @@ namespace Presentation.Middlewares
         /// tenant middleware handler
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="tenantContextService"></param>
+        /// <param name="tenantContext"></param>
         /// <returns></returns>
-        public async Task Invoke(HttpContext context, ITenantContextService tenantContextService)
+        public async Task Invoke(HttpContext context, ITenantContext tenantContext)
         {
             var userId = GetUserId(context);
 
             if (userId != null)
             {
-                tenantContextService.TenantContext.UserId = userId;
-                tenantContextService.TenantContext.Subscription = GetSubscription(context);
-                tenantContextService.TenantContext.IsSubscriptionExpired = IsSubscriptionExpired(context);
+                tenantContext.UserId = userId;
+                tenantContext.Subscription = GetSubscription(context);
+                tenantContext.IsSubscriptionExpired = IsSubscriptionExpired(context);
             }
 
             await _next(context);

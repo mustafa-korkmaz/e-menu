@@ -13,9 +13,9 @@ namespace Application.Services.Menu
 {
     public class MenuService : ServiceBase<IMenuRepository, Domain.Aggregates.Menu.Menu, MenuDto>, IMenuService
     {
-        private readonly ITenantContextService _tenantContextService;
+        private readonly ITenantContext _tenantContextService;
 
-        public MenuService(IUnitOfWork uow, ITenantContextService tenantContextService, ILogger<MenuService> logger, IMapper mapper)
+        public MenuService(IUnitOfWork uow, ITenantContext tenantContextService, ILogger<MenuService> logger, IMapper mapper)
         : base(uow, logger, mapper)
         {
             _tenantContextService = tenantContextService;
@@ -23,7 +23,7 @@ namespace Application.Services.Menu
 
         public override async Task AddAsync(MenuDto dto)
         {
-            dto.CreatedBy = _tenantContextService.TenantContext.UserId!;
+            dto.CreatedBy = _tenantContextService.UserId!;
 
             var existingUrlSlug = await Repository.GetByUrlSlugAsync(dto.UrlSlug);
 
@@ -86,7 +86,7 @@ namespace Application.Services.Menu
             {
                 Offset = request.Offset,
                 Limit = request.Limit,
-                SearchCriteria = _tenantContextService.TenantContext.UserId!
+                SearchCriteria = _tenantContextService.UserId!
             };
 
             var response = await Repository.ListAsync(req);
@@ -96,7 +96,7 @@ namespace Application.Services.Menu
 
         private void ValidateMenuOwnership(Domain.Aggregates.Menu.Menu? menu)
         {
-            if (menu == null || menu.CreatedBy != _tenantContextService.TenantContext.UserId!)
+            if (menu == null || menu.CreatedBy != _tenantContextService.UserId!)
             {
                 throw new ValidationException(ErrorCode.MenuNotFound);
             }

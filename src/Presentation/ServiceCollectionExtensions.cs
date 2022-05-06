@@ -34,7 +34,7 @@ namespace Presentation
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<ITenantContextService, TenantContextService>();
+            services.AddScoped<ITenantContext, TenantContext>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IMenuService, MenuService>();
             services.AddTransient<IAccountService, AccountService>();

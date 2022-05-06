@@ -6,6 +6,10 @@ namespace Domain.Aggregates
     {
         public string Id { get; private set; }
         public DateTime CreatedAt { get; private set; }
+        public void SetCreatedAt(DateTime createdAt)
+        {
+            CreatedAt = createdAt;
+        }
 
         public string? CreatedBy { get; protected set; }
 
@@ -20,9 +24,11 @@ namespace Domain.Aggregates
 
     public interface IDocument
     {
-        public string Id { get; }
+        string Id { get; }
 
         DateTime CreatedAt { get; }
+        
+        void SetCreatedAt(DateTime createdAt);
     }
 
     public class ListDocumentRequest

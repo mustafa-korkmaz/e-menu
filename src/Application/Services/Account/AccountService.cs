@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using Application.Dto.User;
-using Domain.Aggregates.Product;
 using Domain.Aggregates.User;
 using System.IdentityModel.Tokens.Jwt;
 using Application.Enums;
@@ -19,14 +18,14 @@ namespace Application.Services.Account
 {
     public class AccountService : ServiceBase<IUserRepository, User, UserDto>, IAccountService
     {
-        private readonly ITenantContextService _tenantContextService;
+        private readonly ITenantContext _tenantContext;
         private readonly ILogger<AccountService> _logger;
         private readonly IMapper _mapper;
 
-        public AccountService(IUnitOfWork uow, ITenantContextService tenantContextService, ILogger<AccountService> logger, IMapper mapper /*IEmailService emailService*/ )
+        public AccountService(IUnitOfWork uow, ITenantContext tenantContext, ILogger<AccountService> logger, IMapper mapper /*IEmailService emailService*/ )
           : base(uow, logger, mapper)
         {
-            _tenantContextService = tenantContextService;
+            _tenantContext = tenantContext;
             _logger = logger;
             _mapper = mapper;
         }
@@ -83,7 +82,7 @@ namespace Application.Services.Account
 
         public async Task<UserDto> GetUserAsync()
         {
-            var user = await Repository.GetByIdAsync(_tenantContextService.TenantContext.UserId!);
+            var user = await Repository.GetByIdAsync(_tenantContext.UserId!);
 
             if (user == null)
             {
