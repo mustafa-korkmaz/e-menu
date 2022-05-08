@@ -35,5 +35,9 @@ namespace Presentation.ViewModels.Product
         [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
         [Display(Name = "DISPLAY_ORDER")]
         public short? DisplayOrder { get; set; }
+
+        [Required(ErrorMessage = ValidationErrorCode.RequiredField)]
+        [Display(Name = "IS_ACTIVE")]
+        public bool? IsActive { get; set; }
     }
 }

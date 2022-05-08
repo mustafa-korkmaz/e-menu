@@ -33,8 +33,6 @@ namespace Presentation
                     opt.MapFrom(source => source.Subscription.ResolveEnum()));
 
             CreateMap<AddEditProductViewModel, ProductDto>()
-                .ForMember(dest => dest.IsActive, opt =>
-                    opt.MapFrom(source => true))
                 .ForMember(dest => dest.Currency, opt =>
                     opt.MapFrom(source => source.Currency!.ToEnum<Currency>()))
                 .ForMember(dest => dest.Id, opt =>

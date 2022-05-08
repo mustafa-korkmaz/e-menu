@@ -20,7 +20,7 @@
 
         public short DisplayOrder { get; private set; }
 
-        public Product(string id, string? categoryId, string menuId, string name, string description, string? imageUrl, decimal price, byte currency, short displayOrder, string createdBy) : base(id)
+        public Product(string id, string? categoryId, string menuId, string name, string? description, string? imageUrl, decimal price, byte currency, short displayOrder, bool isActive, string createdBy) : base(id)
         {
             CategoryId = categoryId;
             MenuId = menuId;
@@ -31,6 +31,7 @@
             Currency = currency;
             IsActive = true;
             DisplayOrder = displayOrder;
+            IsActive = isActive;
             CreatedBy = createdBy;
         }
     }

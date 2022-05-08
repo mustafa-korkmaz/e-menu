@@ -54,7 +54,7 @@ namespace Presentation.Controllers
         }
 
         [ModelStateValidation]
-        [HttpGet("{urlSlug}/category/{categoryId}")]
+        [HttpGet("{urlSlug}/c/{categoryId}")]
         [ProducesResponseType(typeof(IEnumerable<ProductItemViewModel>), (int)HttpStatusCode.OK)]
 
         public async Task<IActionResult> GetByCategory([FromRoute] UrlSlugViewModel model, [FromRoute] CategoryIdViewModel categoryIdModel)
