@@ -13,7 +13,7 @@ pool:
 
 steps:
 - script: |
-    docker build -f $(Build.SourcesDirectory)/src/Presentation/Dockerfile -t $(dockerId)/emenu:latest .
+    docker build -f $(Build.SourcesDirectory)/Dockerfile -t $(dockerId)/emenu:latest .
     docker login -u $(dockerId) -p $pswd
     docker push $(dockerId)/emenu:latest
   env:

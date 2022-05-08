@@ -39,7 +39,7 @@ namespace Application
 
             CreateMap<Menu, MenuDto>();
             CreateMap<MenuDto, Menu>()
-                .ConvertUsing((src) => new Menu(src.Id, src.CreatedBy, src.Name, src.ImageUrl, src.UrlSlug, src.IsPublished));
+                .ConvertUsing((src) => new Menu(src.Id, src.CreatedBy!, src.Name, src.ImageUrl, src.UrlSlug, src.IsPublished));
         }
     }
 }
