@@ -7,16 +7,20 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["dotnetcore-ddd-mongo/dotnetcore-ddd-mongo.csproj", "dotnetcore-ddd-mongo/"]
-RUN dotnet restore "dotnetcore-ddd-mongo/dotnetcore-ddd-mongo.csproj"
+COPY ["Presentation/Presentation.csproj", "Presentation/"]
+COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["Application/Application.csproj", "Application/"]
+
+RUN dotnet restore "Presentation/Presentation.csproj"
 COPY . .
-WORKDIR "/src/dotnetcore-ddd-mongo"
-RUN dotnet build "dotnetcore-ddd-mongo.csproj" -c Release -o /app/build
+WORKDIR "/src/Presentation"
+RUN dotnet build "Presentation.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "dotnetcore-ddd-mongo.csproj" -c Release -o /app/publish
+RUN dotnet publish "Presentation.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "dotnetcore-ddd-mongo.dll"]
+ENTRYPOINT ["dotnet", "Presentation.dll"]
