@@ -1,11 +1,14 @@
 ﻿using Application.Constants;
 using Application.Dto;
 using Application.Dto.Menu;
+using Application.Dto.Product;
 using Application.Exceptions;
 using Application.Services.Tenant;
 using AutoMapper;
 using Domain.Aggregates;
 using Domain.Aggregates.Menu;
+using Domain.Aggregates.Product;
+using Infrastructure.Services;
 using Infrastructure.UnitOfWork;
 using Microsoft.Extensions.Logging;
 
@@ -14,11 +17,13 @@ namespace Application.Services.Menu
     public class MenuService : ServiceBase<IMenuRepository, Domain.Aggregates.Menu.Menu, MenuDto>, IMenuService
     {
         private readonly ITenantContext _tenantContextService;
+        private readonly IProductRepository _productRepository;
 
         public MenuService(IUnitOfWork uow, ITenantContext tenantContextService, ILogger<MenuService> logger, IMapper mapper)
         : base(uow, logger, mapper)
         {
             _tenantContextService = tenantContextService;
+            _productRepository = Uow.GetRepository<IProductRepository,Domain.Aggregates.Product.Product>();
         }
 
         public override async Task AddAsync(MenuDto dto)
@@ -92,6 +97,31 @@ namespace Application.Services.Menu
             var response = await Repository.ListAsync(req);
 
             return Mapper.Map<ListDtoResponse<MenuDto>>(response);
+        }
+
+        public async Task<IReadOnlyCollection<dynamic>> ListContentByUrlSlugAsync(string urlSlug)
+        {
+            var menu = await Repository.GetByUrlSlugAsync(urlSlug.GetNormalized());
+
+            if (menu == null)
+            {
+                throw new ValidationException(ErrorCode.MenuNotFound);
+            }
+
+            if (menu.HasCategories)
+            {
+                //return categories
+                var categories = menu.Categories
+                    .OrderBy(c => c.DisplayOrder)
+                    .ToList();
+
+                return Mapper.Map<IReadOnlyCollection<CategoryDto>>(categories);
+            }
+
+            // return products
+            var products = await  _productRepository.ListByMenuIdAsync(menu.Id);
+
+            return Mapper.Map<IReadOnlyCollection<ProductDto>>(products);
         }
 
         private void ValidateMenuOwnership(Domain.Aggregates.Menu.Menu? menu)

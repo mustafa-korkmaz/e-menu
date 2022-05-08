@@ -31,7 +31,7 @@ namespace Application
 
             CreateMap<Product, ProductDto>();
             CreateMap<ProductDto, Product>()
-              .ConvertUsing(src => new Product(src.Id, src.CategoryId, src.MenuId, src.Name, src.ImageUrl, src.Price, (byte)src.Currency, src.DisplayOrder, src.CreatedBy));
+              .ConvertUsing(src => new Product(src.Id, src.CategoryId, src.MenuId, src.Name, src.Description, src.ImageUrl, src.Price, (byte)src.Currency, src.DisplayOrder, src.CreatedBy));
 
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>()

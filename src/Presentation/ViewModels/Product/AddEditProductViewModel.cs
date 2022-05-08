@@ -24,6 +24,10 @@ namespace Presentation.ViewModels.Product
         [Display(Name = "NAME")]
         public string? Name { get; set; }
 
+        [StringLength(250, ErrorMessage = ValidationErrorCode.MaxLength)]
+        [Display(Name = "DESCRIPTION")]
+        public string? Description { get; set; }
+
         [StringLength(1000, ErrorMessage = ValidationErrorCode.MaxLength)]
         [Display(Name = "IMAGE_URL")]
         public string? ImageUrl { get; set; }

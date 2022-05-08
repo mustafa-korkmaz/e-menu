@@ -2,7 +2,9 @@
 {
     public interface IProductRepository : IRepository<Product>
     {
-        Task<IReadOnlyCollection<Product>> ListByIdsAsync(string[] ids);
+        Task<IReadOnlyCollection<Product>> ListByMenuIdAsync(string menuId);
+
+        Task<IReadOnlyCollection<Product>> ListByCategoryIdAsync(string categoryId);
 
         Task<ListDocumentResponse<Product>> ListAsync(ListDocumentRequest<string> request, string userId);
     }

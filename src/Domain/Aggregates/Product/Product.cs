@@ -8,6 +8,8 @@
 
         public string Name { get; private set; }
 
+        public string Description { get; private set; }
+
         public string? ImageUrl { get; private set; }
 
         public decimal Price { get; private set; }
@@ -18,11 +20,12 @@
 
         public short DisplayOrder { get; private set; }
 
-        public Product(string id, string? categoryId, string menuId, string name, string? imageUrl, decimal price, byte currency, short displayOrder, string createdBy) : base(id)
+        public Product(string id, string? categoryId, string menuId, string name, string description, string? imageUrl, decimal price, byte currency, short displayOrder, string createdBy) : base(id)
         {
             CategoryId = categoryId;
             MenuId = menuId;
             Name = name;
+            Description = description;
             ImageUrl = imageUrl;
             Price = price;
             Currency = currency;

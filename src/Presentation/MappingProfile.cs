@@ -7,6 +7,7 @@ using AutoMapper;
 using Infrastructure.Services;
 using MongoDB.Bson;
 using Presentation.ViewModels;
+using Presentation.ViewModels.Home;
 using Presentation.ViewModels.Menu;
 using Presentation.ViewModels.Product;
 using Presentation.ViewModels.User;
@@ -43,16 +44,25 @@ namespace Presentation
                 .ForMember(dest => dest.Currency, opt =>
                     opt.MapFrom(source => source.Currency.ResolveEnum()));
 
+            CreateMap<ProductDto, ProductItemViewModel>()
+                .ForMember(dest => dest.Currency, opt =>
+                    opt.MapFrom(source => source.Currency.ResolveEnum()));
+
             CreateMap(typeof(ListDtoResponse<>), typeof(ListViewModelResponse<>));
 
             CreateMap<ListViewModelRequest, ListDtoRequest>();
 
             CreateMap<AddEditMenuViewModel, MenuDto>()
                 .ForMember(dest => dest.Id, opt =>
-                opt.MapFrom(source => ObjectId.GenerateNewId().ToString()));
+                opt.MapFrom(source => ObjectId.GenerateNewId().ToString()))
+                .ForMember(dest => dest.UrlSlug, opt =>
+                opt.MapFrom(source => source.UrlSlug!.GetNormalized()));
 
             CreateMap<MenuDto, MenuViewModel>();
+           
             CreateMap<CategoryDto, CategoryViewModel>();
+
+            CreateMap<CategoryDto, CategoryItemViewModel>();
 
             CreateMap<AddCategoryViewModel, CategoryDto>()
                 .ForMember(dest => dest.Id, opt =>

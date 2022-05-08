@@ -9,5 +9,7 @@ namespace Application.Services.Product
         public Task DeleteAsync(ProductDto productDto);
 
         Task<ListDtoResponse<ProductDto>> ListAsync(ListDtoRequest<string> request);
+
+        Task<IReadOnlyCollection<ProductDto>> ListByCategoryIdAsync(string categoryId);
     }
 }

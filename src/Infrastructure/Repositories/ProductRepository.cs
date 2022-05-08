@@ -11,9 +11,20 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public async Task<IReadOnlyCollection<Product>> ListByIdsAsync(string[] ids)
+        public async Task<IReadOnlyCollection<Product>> ListByMenuIdAsync(string menuId)
         {
-            return await Collection.Find(p => ids.Contains(p.Id)).ToListAsync();
+            return await Collection.Find(p => p.MenuId == menuId && p.IsActive == true)
+                .SortBy(p => p.DisplayOrder)
+                .ThenByDescending(p => p.Id)
+                .ToListAsync();
+        }
+
+        public async Task<IReadOnlyCollection<Product>> ListByCategoryIdAsync(string categoryId)
+        {
+            return await Collection.Find(p => p.CategoryId == categoryId && p.IsActive == true)
+                .SortBy(p => p.DisplayOrder)
+                .ThenByDescending(p => p.Id)
+                .ToListAsync();
         }
 
         public async Task<ListDocumentResponse<Product>> ListAsync(ListDocumentRequest<string> request, string userId)

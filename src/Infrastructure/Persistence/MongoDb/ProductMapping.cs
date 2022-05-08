@@ -17,6 +17,9 @@ namespace Infrastructure.Persistence.MongoDb
                 map.MapMember(x => x.ImageUrl)
                     .SetDefaultValue(() => null)
                     .SetIgnoreIfNull(true);
+                map.MapMember(x => x.Description)
+                    .SetDefaultValue(() => null)
+                    .SetIgnoreIfNull(true);
 
                 map.MapMember(x => x.Name).SetIsRequired(true);
            

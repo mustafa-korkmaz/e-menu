@@ -73,6 +73,13 @@ namespace Application.Services.Product
             return Mapper.Map<ListDtoResponse<ProductDto>>(response);
         }
 
+        public async Task<IReadOnlyCollection<ProductDto>> ListByCategoryIdAsync(string categoryId)
+        {
+            var products = await Repository.ListByCategoryIdAsync(categoryId);
+
+            return Mapper.Map<IReadOnlyCollection<ProductDto>>(products);
+        }
+
         private async Task ValidateAddAsync(ProductDto productDto)
         {
             var menu = await _menuRepository.GetByIdAsync(productDto.MenuId);
