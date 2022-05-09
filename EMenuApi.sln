@@ -20,6 +20,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{802FA50E
 		build\pre-merge-validation.yml = build\pre-merge-validation.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{7C36C55E-2627-4580-BAC3-FEF1D29B40FE}"
+	ProjectSection(SolutionItems) = preProject
+		deploy\docker-compose.yaml = deploy\docker-compose.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{D40CE158-8650-4665-84C7-DB3DBA54B384}"
+	ProjectSection(SolutionItems) = preProject
+		deploy\scripts\hostname = deploy\scripts\hostname
+		deploy\scripts\hosts = deploy\scripts\hosts
+		deploy\scripts\resolv.conf = deploy\scripts\resolv.conf
+		deploy\scripts\setup.sh = deploy\scripts\setup.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +64,7 @@ Global
 		{862B2EEC-8600-40B4-887C-517D461D190F} = {3648862E-54A4-4B43-BBAB-87F7B80037D8}
 		{9C3C27C5-A7D3-4373-A585-EBBDDB3B0069} = {3648862E-54A4-4B43-BBAB-87F7B80037D8}
 		{BAECC139-15A0-4470-9110-58414B8D122B} = {3648862E-54A4-4B43-BBAB-87F7B80037D8}
+		{D40CE158-8650-4665-84C7-DB3DBA54B384} = {7C36C55E-2627-4580-BAC3-FEF1D29B40FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {16926691-02CE-4435-8B12-A6D70AFB7AB3}

@@ -14,7 +14,7 @@ services:
       - mongo3
   mongo1:
     hostname: mongo1
-    container_name: localmongo1
+    container_name: mongo1
     image: mongo
     expose:
       - 27017
@@ -38,7 +38,7 @@ services:
       - mongo1_config_db:/data/configdb
   mongo2:
     hostname: mongo2
-    container_name: localmongo2
+    container_name: mongo2
     image: mongo
     expose:
       - 27018
@@ -62,7 +62,7 @@ services:
       - mongo2_config_db:/data/configdb
   mongo3:
     hostname: mongo3
-    container_name: localmongo3
+    container_name: mongo3
     image: mongo
     expose:
       - 27019
@@ -84,6 +84,17 @@ services:
     volumes:
       - mongo3_db:/data/db
       - mongo3_config_db:/data/configdb
+  api:
+    hostname: emenu_api
+    container_name: emenu_api
+    restart: unless-stopped
+    image: mute/emenu-api:latest
+    expose:
+     - 80
+    environment:
+    - VIRTUAL_HOST=${EMENU_API_DOMAIN}
+    - LETSENCRYPT_HOST=${EMENU_API_DOMAIN}
+    - MongoDbConfig__ConnectionString=DB_CONN_STR
 
 volumes:
  mongo1_db: null
@@ -92,3 +103,8 @@ volumes:
  mongo1_config_db: null
  mongo2_config_db: null
  mongo3_config_db: null
+
+networks:
+  default:
+    external:
+      name: ${DOCKER_NETWORK}
