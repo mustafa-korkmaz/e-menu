@@ -84,7 +84,7 @@ services:
     volumes:
       - mongo3_db:/data/db
       - mongo3_config_db:/data/configdb
-  api:
+  emenu_api:
     hostname: emenu_api
     container_name: emenu_api
     restart: unless-stopped
