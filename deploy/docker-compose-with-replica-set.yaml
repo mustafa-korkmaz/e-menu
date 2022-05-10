@@ -1,0 +1,110 @@
+services:
+  mongo-setup:
+    container_name: mongo-setup
+    image: mongo
+    restart: on-failure
+    networks:
+      default:
+    volumes:
+      - ./scripts:/etc/
+    entrypoint: [ "/etc/setup.sh" ]
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+  mongo1:
+    hostname: mongo1
+    container_name: mongo1
+    image: mongo
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    restart: always
+    entrypoint:
+      [
+        "/usr/bin/mongod",
+        "--bind_ip_all",
+        "--replSet",
+        "rs0",
+        "--journal",
+        "--dbpath",
+        "/data/db",
+        "--port",
+        "27017"
+      ]
+    volumes:
+      - mongo1_db:/data/db
+      - mongo1_config_db:/data/configdb
+  mongo2:
+    hostname: mongo2
+    container_name: mongo2
+    image: mongo
+    expose:
+      - 27018
+    ports:
+      - 27018:27018
+    restart: always
+    entrypoint:
+      [
+        "/usr/bin/mongod",
+        "--bind_ip_all",
+        "--replSet",
+        "rs0",
+        "--journal",
+        "--dbpath",
+        "/data/db",
+        "--port",
+        "27018"
+      ]
+    volumes:
+      - mongo2_db:/data/db
+      - mongo2_config_db:/data/configdb
+  mongo3:
+    hostname: mongo3
+    container_name: mongo3
+    image: mongo
+    expose:
+      - 27019
+    ports:
+      - 27019:27019
+    restart: always
+    entrypoint:
+      [
+        "/usr/bin/mongod",
+        "--bind_ip_all",
+        "--replSet",
+        "rs0",
+        "--journal",
+        "--dbpath",
+        "/data/db",
+        "--port",
+        "27019"
+      ]
+    volumes:
+      - mongo3_db:/data/db
+      - mongo3_config_db:/data/configdb
+  emenu_api:
+    hostname: emenu_api
+    container_name: emenu_api
+    restart: unless-stopped
+    image: mute/emenu-api:latest
+    expose:
+     - 80
+    environment:
+    - VIRTUAL_HOST=${EMENU_API_DOMAIN}
+    - LETSENCRYPT_HOST=${EMENU_API_DOMAIN}
+    - MongoDbConfig__ConnectionString=mongodb://${EMENU_API_DB_USER}:${EMENU_API_DB_PWD}@emenu_db:27017/?authSource=admin
+
+volumes:
+ mongo1_db: null
+ mongo2_db: null
+ mongo3_db: null
+ mongo1_config_db: null
+ mongo2_config_db: null
+ mongo3_config_db: null
+
+networks:
+  default:
+    external:
+      name: ${DOCKER_NETWORK}
