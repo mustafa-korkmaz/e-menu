@@ -13,7 +13,7 @@ using Presentation.ViewModels.Product;
 namespace Presentation.Controllers
 {
     [ApiController]
-    [Route("")]
+    [Route("m")]
     public class HomeController : ControllerBase
     {
         private readonly IMenuService _menuService;
@@ -54,7 +54,7 @@ namespace Presentation.Controllers
         }
 
         [ModelStateValidation]
-        [HttpGet("{urlSlug}/c/{categoryId}")]
+        [HttpGet("{urlSlug}/{categoryId}")]
         [ProducesResponseType(typeof(IEnumerable<ProductItemViewModel>), (int)HttpStatusCode.OK)]
 
         public async Task<IActionResult> GetByCategory([FromRoute] UrlSlugViewModel model, [FromRoute] CategoryIdViewModel categoryIdModel)
