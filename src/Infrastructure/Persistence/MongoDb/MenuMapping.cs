@@ -15,6 +15,11 @@ namespace Infrastructure.Persistence.MongoDb
                 map.AutoMap();
                 map.SetIgnoreExtraElements(true);
                 map.MapMember(x=>x.ImageUrl).SetIgnoreIfNull(true);
+                map.MapMember(x => x.LogoUrl).SetIgnoreIfNull(true);
+                map.MapMember(x => x.Address).SetIgnoreIfNull(true);
+                map.MapMember(x => x.Twitter).SetIgnoreIfNull(true);
+                map.MapMember(x => x.Facebook).SetIgnoreIfNull(true);
+                map.MapMember(x => x.Instagram).SetIgnoreIfNull(true);
                 map.MapMember(x => x.UrlSlug).SetIsRequired(true);
                 map.MapMember(x => x.Name).SetIsRequired(true);
             });

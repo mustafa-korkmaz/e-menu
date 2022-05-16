@@ -8,7 +8,6 @@ using Domain.Aggregates.Menu;
 using Domain.Aggregates.Product;
 using Domain.Aggregates.User;
 using Infrastructure.Services;
-using MongoDB.Bson;
 
 namespace Application
 {
@@ -39,7 +38,9 @@ namespace Application
 
             CreateMap<Menu, MenuDto>();
             CreateMap<MenuDto, Menu>()
-                .ConvertUsing((src) => new Menu(src.Id, src.CreatedBy!, src.Name, src.ImageUrl, src.UrlSlug, src.IsPublished));
+                .ConvertUsing((src) => new Menu(src.Id, src.CreatedBy!, src.Name,
+                    src.ImageUrl, src.LogoUrl, src.UrlSlug, src.Twitter, src.Facebook,
+                    src.Instagram, src.Address, src.IsPublished));
         }
     }
 }

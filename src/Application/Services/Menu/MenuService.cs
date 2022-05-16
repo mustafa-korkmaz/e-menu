@@ -23,7 +23,7 @@ namespace Application.Services.Menu
         : base(uow, logger, mapper)
         {
             _tenantContextService = tenantContextService;
-            _productRepository = Uow.GetRepository<IProductRepository,Domain.Aggregates.Product.Product>();
+            _productRepository = Uow.GetRepository<IProductRepository, Domain.Aggregates.Product.Product>();
         }
 
         public override async Task AddAsync(MenuDto dto)
@@ -48,7 +48,9 @@ namespace Application.Services.Menu
 
             document!.SetName(dto.Name);
             document.SetUrlSlug(dto.UrlSlug);
-            document.SetImageUrl(dto.ImageUrl);
+            document.SetImageUrls(dto.ImageUrl, dto.LogoUrl);
+            document.SetSocialMedia(dto.Twitter, dto.Facebook, dto.Instagram);
+            document.SetAddress(dto.Address);
             document.SetIsPublished(dto.IsPublished);
 
             await Repository.ReplaceOneAsync(document);
@@ -119,7 +121,7 @@ namespace Application.Services.Menu
             }
 
             // return products
-            var products = await  _productRepository.ListByMenuIdAsync(menu.Id);
+            var products = await _productRepository.ListByMenuIdAsync(menu.Id);
 
             return Mapper.Map<IReadOnlyCollection<ProductDto>>(products);
         }

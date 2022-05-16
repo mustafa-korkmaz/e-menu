@@ -6,9 +6,19 @@ namespace Domain.Aggregates.Menu
     {
         public string Name { get; private set; }
 
+        public string? LogoUrl { get; private set; }
+
         public string? ImageUrl { get; private set; }
 
         public string UrlSlug { get; private set; }
+
+        public string? Twitter { get; private set; }
+
+        public string? Facebook { get; private set; }
+
+        public string? Instagram { get; private set; }
+
+        public string? Address { get; private set; }
 
         private ICollection<Category> _categories;
         public IReadOnlyCollection<Category> Categories
@@ -26,13 +36,20 @@ namespace Domain.Aggregates.Menu
 
         public bool HasCategories => _categories.Any();
 
-        public Menu(string id, string userId, string name, string? imageUrl, string urlSlug, bool isPublished) : base(id)
+        public Menu(string id, string userId, string name, string? imageUrl,
+            string? logoUrl, string urlSlug, string? twitter, string? facebook,
+            string? instagram, string? address, bool isPublished) : base(id)
         {
             Name = name;
             CreatedBy = userId;
             ImageUrl = imageUrl;
+            LogoUrl = logoUrl;
             UrlSlug = urlSlug;
             _categories = new List<Category>();
+            Twitter = twitter;
+            Facebook = facebook;
+            Instagram = instagram;
+            Address = address;
             IsPublished = isPublished;
         }
 
@@ -69,14 +86,29 @@ namespace Domain.Aggregates.Menu
             Name = name;
         }
 
+        public void SetSocialMedia(string? twitter, string? facebook, string? instagram)
+        {
+            Twitter = twitter;
+            Facebook = facebook;
+            Instagram = instagram;
+        }
+
         public void SetUrlSlug(string urlSlug)
         {
             UrlSlug = urlSlug;
         }
-        public void SetImageUrl(string? imageUrl)
+
+        public void SetImageUrls(string? imageUrl, string? logoUrl)
         {
             ImageUrl = imageUrl;
+            LogoUrl = logoUrl;
         }
+
+        public void SetAddress(string? address)
+        {
+            Address = address;
+        }
+
         public void SetIsPublished(bool isPublished)
         {
             IsPublished = isPublished;
